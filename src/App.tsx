@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+function secondsToHHMMSS(totalSeconds: number): string {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
 
-function App() {
-  const [count, setCount] = useState(0)
+  const pad = (n: number) => n.toString().padStart(2, '0');
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 
-export default App
+function App() {
+
+
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const effort = Number(formData.get("effort"));
+    const power = Number(formData.get("power"));
+    const speed = Number(formData.get("speed"));
+
+    console.log(effort, power, speed);
+    if (power && effort) {
+      console.log((effort / power) * speed);
+      console.log(secondsToHHMMSS((effort / power) * speed))
+    }
+  };
+  return (
+    <>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="effort">Effort</label>
+          <input name="effort" type="number" />
+        </div>
+        <div>
+          <label htmlFor="power">Power</label>
+          <input name="power" type="number" />
+        </div>
+        <div>
+          <label htmlFor="speed">Speed</label>
+          <input name="speed" step=".01" type="number" />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </>
+  );
+}
+
+export default App;
