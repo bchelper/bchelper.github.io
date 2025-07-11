@@ -18,6 +18,7 @@ function App() {
   const [projectDuration, setProjectDuration] = useState<string>();
   const [regenDuration, setRegenDuration] = useState<string>();
   const [totalDuration, setTotalDuration] = useState<string>();
+  const [totalExp, setTotalExp] = useState<number>();
   const [ticks, setTicks] = useState<number>();
   const [refills, setRefills] = useState<number>();
   const [formValues, setFormValues] = useState({
@@ -36,10 +37,17 @@ function App() {
     const stamina = Number(formData.get("stamina"));
     const staminaRegen = Number(formData.get("staminaRegen"));
     const staminaDrain = Number(formData.get("staminaDrain"));
+    const expPerTick = Number(formData.get("expPerTick"));
+
     let ticks = 0;
     let refills = 0;
     if (power && effort) {
       ticks = effort / power;
+
+      if (expPerTick) {
+        setTotalExp(ticks * expPerTick);
+      }
+
       refills = Math.ceil((ticks * staminaDrain) / stamina) - 1;
       setTicks(Math.ceil(ticks));
       setRefills(refills);
@@ -110,7 +118,7 @@ function App() {
           />
         </div>
         <div>
-          <label htmlFor="staminaDrain">Stamina drain / t: </label>
+          <label htmlFor="staminaDrain">Stamina drain / tick: </label>
           <input
             name="staminaDrain"
             step=".01"
@@ -126,10 +134,18 @@ function App() {
           />
         </div>
         <div>
-          <label htmlFor="staminaRegen">Stamina regen / s: </label>
+          <label htmlFor="staminaRegen">Stamina regen / sec: </label>
           <input
             name="staminaRegen"
             step=".01"
+            type="number"
+            onChange={() => formRef.current?.requestSubmit()}
+          />
+        </div>
+        <div>
+          <label htmlFor="expPerTick">Exp / tick: </label>
+          <input
+            name="expPerTick"
             type="number"
             onChange={() => formRef.current?.requestSubmit()}
           />
@@ -139,6 +155,7 @@ function App() {
         <div>Regen duration per refill: {regenDuration}</div>
         <div>Project duration: {projectDuration}</div>
         <div>Total duration: {totalDuration}</div>
+        <div>Total exp: {totalExp}</div>
       </form>
     </>
   );
