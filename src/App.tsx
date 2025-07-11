@@ -136,7 +136,6 @@ function App() {
         </div>
         <div>Ticks: {ticks}</div>
         <div>Refills needed: {refills}</div>
-        <div>Stamina regen per second:</div>
         <div>Regen duration per refill: {regenDuration}</div>
         <div>Project duration: {projectDuration}</div>
         <div>Total duration: {totalDuration}</div>
